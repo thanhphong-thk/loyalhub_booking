@@ -13,7 +13,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
-    Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::prefix('roles')->group(function() {
+        Route::get('/index', [RoleController::class, 'index'])->name('roles.index');
+        Route::post('/create', [RoleController::class, 'create'])->name('roles.create');
+        Route::post('/update/{id}', [RoleController::class , 'update'])->name('roles.update');
+        Route::delete('/delete/{id}', [RoleController::class , 'destroy'])->name('roles.destroy');
+    });
 });
 
 require __DIR__.'/settings.php';

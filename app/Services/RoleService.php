@@ -19,4 +19,9 @@ class RoleService
             'roles' => $this->roleRepository->get(),
         ];
     }
+
+    public function createRole(array $data)
+    {
+        return $this->roleRepository->create($data);
+    }
 }

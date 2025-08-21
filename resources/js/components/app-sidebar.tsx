@@ -51,7 +51,7 @@ const data = {
       items: [
         {
           title: "Chức vụ",
-          url: "/roles",
+          url: "/roles/index",
         },
       ],
     },
