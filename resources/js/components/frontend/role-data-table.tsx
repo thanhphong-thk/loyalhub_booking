@@ -90,20 +90,20 @@ export default function RoleDataTable({ roles }: Props) {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
     const [newRole, setNewRole] = React.useState({
-        name: "",
+        title: "",
         description: "",
     });
 
     const columns: ColumnDef<Role>[] = [
         {
-            accessorKey: "name",
+            accessorKey: "title",
             header: ({ column }) => (
                 <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
                     Tên
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
-            cell: ({ row }) => <div className="font-medium">{row.getValue("name")}</div>,
+            cell: ({ row }) => <div className="font-medium">{row.getValue("title")}</div>,
         },
         {
             accessorKey: "description",
@@ -217,11 +217,11 @@ export default function RoleDataTable({ roles }: Props) {
 
     const handleAddRole = async () => {
         try {
-            const response = await axios.post('roles/create', {
-                name: newRole.name,
+            const response = await axios.post('/roles/create', {
+                title: newRole.title,
                 description: newRole.description
             });
-            setNewRole({ name: '', description: '' });
+            setNewRole({ title: '', description: '' });
             toast.success("Thêm mới vai trò thành công");
             window.location.reload();
             setShowAddDialog(false);
@@ -258,7 +258,7 @@ export default function RoleDataTable({ roles }: Props) {
     const handleEditRole = async () => {
         try {
             const response = await axios.post(`/roles/update/${editRole?.id}`, {
-                name: editRole?.name,
+                title: editRole?.title,
                 description: editRole?.description
             });
 
@@ -301,9 +301,9 @@ export default function RoleDataTable({ roles }: Props) {
                                         <Label htmlFor="name">Tên</Label>
                                         <Input
                                             id="name"
-                                            value={newRole.name}
+                                            value={newRole.title}
                                             onChange={(e) =>
-                                                setNewRole({ ...newRole, name: e.target.value })
+                                                setNewRole({ ...newRole, title: e.target.value })
                                             }
                                         />
                                     </div>
@@ -345,9 +345,9 @@ export default function RoleDataTable({ roles }: Props) {
                                         <Label htmlFor="edit-name">Tên</Label>
                                         <Input
                                             id="edit-name"
-                                            value={editRole?.name || ""}
+                                            value={editRole?.title || ""}
                                             onChange={(e) =>
-                                                setEditRole((prev) => prev ? { ...prev, name: e.target.value } : prev)
+                                                setEditRole((prev) => prev ? { ...prev, title: e.target.value } : prev)
                                             }
                                         />
                                     </div>
@@ -383,10 +383,10 @@ export default function RoleDataTable({ roles }: Props) {
                         <Input
                             placeholder="Search..."
                             value={
-                                (table.getColumn("name")?.getFilterValue() as string) ?? ""
+                                (table.getColumn("title")?.getFilterValue() as string) ?? ""
                             }
                             onChange={(event) =>
-                                table.getColumn("name")?.setFilterValue(event.target.value)
+                                table.getColumn("title")?.setFilterValue(event.target.value)
                             }
                             className="pl-8"
                         />

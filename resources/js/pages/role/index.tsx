@@ -9,7 +9,7 @@ type RoleProps = PageProps<{
 export default function Roles({ roles }: RoleProps) {
     return (
         <AppLayout>
-            <div className="p4">
+            <div className="p-4">
                 <RoleDataTable roles={roles}>
 
                 </RoleDataTable>

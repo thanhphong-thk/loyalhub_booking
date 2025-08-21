@@ -17,4 +17,9 @@ class RoleRepository
     {
         return $this->role->all();
     }
+
+    public function create(array $data)
+    {
+        return $this->role->create($data);
+    }
 }

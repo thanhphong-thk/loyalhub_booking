@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RoleRequest;
 use App\Models\Role;
 use App\Services\RoleService;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class RoleController extends Controller
@@ -23,51 +26,53 @@ class RoleController extends Controller
         return Inertia::render('role/index', $data);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+
+    public function create(RoleRequest $request)
     {
-        //
+        DB::beginTransaction();
+        try{
+            $data = $request->validated();
+            $this->roleService->createRole($data);
+
+            DB::commit();
+            return $this->success($data, "Thêm mới thành công");
+
+        } catch(Exception $e) {
+            DB::rollBack();
+            return $this->error($e->getMessage(),null, "Đã xảy ra lỗi");
+        }
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function update(RoleRequest $request, $id)
     {
-        //
+        try {
+            $data = $request->validated();
+
+            $role = Role::findOrFail($id);
+            $role->update($data);
+
+            return $this->success($data,'Cập nhật vai trò thành công.');
+        } catch (Exception $e) {
+
+            return $this->error($e->getMessage(), $data, "Đã xảy ra lỗi");
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Role $role)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Role $role)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Role $role)
-    {
-        //
-    }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(int $roleId)
     {
-        //
+        try{
+            $role = Role::find($roleId);
+            $role->delete();
+
+            return $this->success($roleId, "Xóa thành công");
+        } catch (Exception $e) {
+
+            return $this->error($e->getMessage(), $roleId, "Đã xảy ra lỗi");
+
+        }
     }
 }
